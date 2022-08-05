@@ -1,0 +1,23 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+/*#12161d*/
+body {
+    margin-bottom: 60px;
+    background-color: White;
+    color: Black;
+}
+.e-bigger {
+    font-size: x-large;
+}
