@@ -19,6 +19,7 @@ namespace ClothingShopping.Models
 
         public int Quantity { get; set; }
         [Required]
+        [Range(0,int.MaxValue,ErrorMessage = "Giá Trị Phải Lớn Hơn 0")]
         public int Price { get; set; }
 
         public virtual Category Category { get; set; }

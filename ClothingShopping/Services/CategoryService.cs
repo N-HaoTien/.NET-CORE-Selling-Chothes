@@ -13,6 +13,7 @@ namespace ClothingShopping.Services
         public IEnumerable<Category> GetAll(int page, int pageSize, out int totalRow, string filter);
 
         public IEnumerable<Category> GetAll();
+        public bool ChangeStatusCategory(int? Id);
 
         public void Add(Category appRole);
 
@@ -95,5 +96,15 @@ namespace ClothingShopping.Services
         {
             _unitOfWork.Commit();
         }
+        public bool ChangeStatusCategory(int? Id)
+        {
+            if (Id.HasValue)
+            {
+                _category.ChangeStatusCategory(Id);
+                return true;
+            }
+            return false;
+        }
+
     }
 }

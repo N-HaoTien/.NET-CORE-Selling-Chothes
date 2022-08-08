@@ -21,10 +21,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
     <PackageReference Include="SlugGenerator" Version="2.0.2" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="20.2.0.40" />
+    <PackageReference Include="toastr" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\User\" />
+    <Folder Include="wwwroot\Image-Icon\" />
   </ItemGroup>
 
 </Project>

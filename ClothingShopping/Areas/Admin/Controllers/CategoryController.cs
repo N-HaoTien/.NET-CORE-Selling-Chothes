@@ -74,8 +74,8 @@ namespace ClothingShopping.Areas.Admin.Controllers
                 {
                     ModelState.AddModelError("Name", "Category name already exists");
                     return Json(new { isSuccess = false, html = Helper.RenderRazorView(this, "AddorUpdate", category) });
-
                 }
+                
                 //Helper.RenderRazorView(this,"ListCategory", _categoryService.GetAll())
                 //Helper.RenderRazorView(this, "AddorUpdate", category)
                 return Json(new { isSuccess = true, html = Helper.RenderRazorView(this, "ListCategory", _categoryService.GetAll()) });
@@ -84,16 +84,15 @@ namespace ClothingShopping.Areas.Admin.Controllers
 
         }
         // GET: Admin/Category/Details/5
-
         [Route("{id?}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> ChangeStatus(int? Id)
         {
-
-            if (_categoryService.GetDetail(id) == null)
+            if (_categoryService.ChangeStatusCategory(Id))
             {
-                return NotFound();
+                _categoryService.ChangeStatusCategory(Id);
+                return Json(new { isSuccess = true,/*message ="Đổi Trạng Thái từ "+ _categoryService.ChangeStatusCategory(Id)+" sang"+ !_categoryService.ChangeStatusCategory(Id)*/ });
             }
-            return View(_categoryService.GetDetail(id));
+            return Json(new {isSuccess = false});
         }
         public async Task<IActionResult> Delete(int? id)
         {

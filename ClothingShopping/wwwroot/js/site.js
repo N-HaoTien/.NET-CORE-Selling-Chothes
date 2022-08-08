@@ -10,6 +10,7 @@ ShowInPopup = (url, title) => {
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
+            console.log("Link là "+url)
 
         }
     })
@@ -35,6 +36,33 @@ JqueryAjax = form => {
                 else {
                     console.log(res)
                     $("#form-modal .modal-body").html(res.html);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+
+        })
+    }
+    catch (e) {
+        console.log(e);
+    }
+    return false;
+}
+
+function ChangeStatus(Id) {
+    try {
+        $.ajax({
+            type: "POST",
+            url: "/Category/ChangeStatus?Id=" + Id,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isSuccess) {
+                    console.log(res)
+                }
+                else {
+                    console.log(res)
                 }
             },
             error: function (err) {

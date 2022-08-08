@@ -6,6 +6,7 @@ namespace ClothingShopping.Repository
 {
     public interface ICategory : IRepository<Category>
     {
+        public void ChangeStatusCategory(int? Id);
 
     }
     public class CategoryRepository : RepositoryBase<Category>,ICategory
@@ -16,5 +17,12 @@ namespace ClothingShopping.Repository
         {
             DbContext = dbContext;
         }
+        public void ChangeStatusCategory(int? Id)
+        {
+            var category = GetSingleById(Id);
+            category.Status = !category.Status;
+            Commit();
+        }
+
     }
 }
