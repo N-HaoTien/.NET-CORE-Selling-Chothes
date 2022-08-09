@@ -75,7 +75,7 @@ namespace ClothingShopping.Areas.Admin.Controllers
                     ModelState.AddModelError("Name", "Category name already exists");
                     return Json(new { isSuccess = false, html = Helper.RenderRazorView(this, "AddorUpdate", category) });
                 }
-                
+
                 //Helper.RenderRazorView(this,"ListCategory", _categoryService.GetAll())
                 //Helper.RenderRazorView(this, "AddorUpdate", category)
                 return Json(new { isSuccess = true, html = Helper.RenderRazorView(this, "ListCategory", _categoryService.GetAll()) });
@@ -83,41 +83,44 @@ namespace ClothingShopping.Areas.Admin.Controllers
             return Json(new { isSuccess = false, html = Helper.RenderRazorView(this, "AddorUpdate", category) });
 
         }
-        // GET: Admin/Category/Details/5
+        [HttpPost]
+        public async Task<IActionResult> SearchCategory(string NameCategory)
+        {
+            if (string.IsNullOrEmpty(NameCategory))
+            {
+                return Json(new { isSuccess = false, html = Helper.RenderRazorView(this, "ListCategory", _categoryService.GetAll()) });
+            }
+            return Json(new { isSuccess = true, html = Helper.RenderRazorView(this, "ListCategory", _categoryService.GetAllByName(NameCategory)) });
+        }
+        [NonAction]
+        public bool CheckStatus(int? Id)
+        {
+            return _categoryService.GetDetail(Id).Status;
+        }
+        // GET: Admin/Category/ChangeStatus/5
         [Route("{id?}")]
         public async Task<IActionResult> ChangeStatus(int? Id)
         {
             if (_categoryService.ChangeStatusCategory(Id))
             {
                 _categoryService.ChangeStatusCategory(Id);
-                return Json(new { isSuccess = true,/*message ="Đổi Trạng Thái từ "+ _categoryService.ChangeStatusCategory(Id)+" sang"+ !_categoryService.ChangeStatusCategory(Id)*/ });
+                return Json(new { isSuccess = true, message = "Đổi Trạng Thái từ " + CheckStatus(Id) + " sang " + !CheckStatus(Id) });
             }
-            return Json(new {isSuccess = false});
+            return Json(new { isSuccess = false });
         }
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (_categoryService.GetDetail(id) == null)
-            {
-                return NotFound();
-            }
-            return View(_categoryService.GetDetail(id));
-        }
-
         // POST: Admin/Category/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_categoryService.GetDetail(id) == null)
+            try
             {
-                return NotFound();
+                _categoryService.Delete(id);
+                return Json(new { isSuccess = true, html = Helper.RenderRazorView(this, "ListCategory", _categoryService.GetAll()) });
             }
-            else
+            catch
             {
-                var category = _categoryService.GetDetail(id);
-                _categoryService.Delete(category);
+                return Json(new { isSuccess = false, toastr = "Error Bussiness by Product had CategoryId" });
             }
-            return RedirectToAction(nameof(Index));
         }
     }
 }

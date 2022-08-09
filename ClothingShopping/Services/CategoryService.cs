@@ -14,6 +14,7 @@ namespace ClothingShopping.Services
 
         public IEnumerable<Category> GetAll();
         public bool ChangeStatusCategory(int? Id);
+        public IEnumerable<Category> GetAllByName(string Name);
 
         public void Add(Category appRole);
 
@@ -35,12 +36,12 @@ namespace ClothingShopping.Services
             _category = category;
             _unitOfWork = unitOfWork;
         }
-        public bool CheckExistName(int id,string name)
+        public bool CheckExistName(int id, string name)
         {
             //Expression<Func<Category, bool>> expression = e => e.Name.Equals(category.Name);
-            
-            Expression<Func<Category, bool>> where = u => u.Name == name ;
-            if (id != 0) 
+
+            Expression<Func<Category, bool>> where = u => u.Name == name;
+            if (id != 0)
             {
                 where = u => u.Id != id && u.Name == name;
             }
@@ -86,6 +87,8 @@ namespace ClothingShopping.Services
         public void Delete(int id)
         {
             _category.Delete(id);
+            Save();
+
         }
         public void Delete(Category Category)
         {
@@ -105,6 +108,9 @@ namespace ClothingShopping.Services
             }
             return false;
         }
-
+        public IEnumerable<Category> GetAllByName(string Name)
+        {
+            return _category.GetAllByName(Name);
+        }
     }
 }
