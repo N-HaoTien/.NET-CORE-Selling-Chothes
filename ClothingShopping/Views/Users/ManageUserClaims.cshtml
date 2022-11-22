@@ -1,0 +1,19 @@
+﻿@model ClothingShopping.ViewModel.UserClaimViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @for (int i = 0; i < Model.Claims.Count; i++)
+    {
+        <div class="form-group">
+            @Html.HiddenFor(item => Model.Claims[i].ClaimType)
+            @Html.CheckBoxFor(m => Model.Claims[i].IsCheck)
+            <label class="form-check-label" style="color:yellow" asp-for="@Model.Claims[i].IsCheck">
+                @Model.Claims[i].ClaimType
+            </label>
+        </div>
+    }
+    <button type="submit" class="btn btn-success">Cập Nhật </button>
+}

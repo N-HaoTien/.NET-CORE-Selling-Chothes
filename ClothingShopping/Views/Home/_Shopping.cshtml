@@ -1,0 +1,218 @@
+﻿@model PagedResult<Product>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<style>
+    .inputtext {
+        width: 100%;
+        height: 100%;
+        border: none;
+        font-size: 16px;
+        color: Black;
+        padding-left: 20px;
+    }
+
+    .btnSearch {
+        font-size: 16px;
+        color: #ffffff;
+        position: absolute;
+        right: -3px;
+        top: -1px;
+        border: 1px solid #e7ab3c;
+        background: #e7ab3c;
+        padding: 12px 16px 12px;
+        cursor: pointer;
+    }
+
+    .khung {
+        height: 50px;
+        border: 1px solid #ebebeb;
+    }
+</style>
+<div class="breacrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <a href="#"><i class="fa fa-home"></i> Home</a>
+                    <span>Shop</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="product-shop spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
+                <div class="filter-widget">
+                    <h4 class="fw-title">Styles</h4>
+                    <ul class="filter-catagories">
+                        <li>
+                            <a style="padding:0 20px 0 20px" href="#"><i class="fa-solid fa-list"></i></a>
+                            <a href="#"><i class="fa-solid fa-sliders"></i></a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="filter-widget">
+                    <h4 class="fw-title">Categories</h4>
+                    <div class="fw-brand-check" id="CategoriesDiv">
+                        @foreach (var item in ViewBag.Categories)
+                        {
+                            <div class="bc-item">
+                                <label>
+                                    @item.NameWithIcon
+                                    <input type="checkbox" value="@item.Id" id="@item.Id" onclick="CheckboxCategories()">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="filter-widget">
+                    <h4 class="fw-title">Price</h4>
+                    <div class="filter-range-wrap">
+                        <div class="range-slider">
+                            <div class="price-input">
+                                <input readonly style="max-width:40%" type="text" id="minamount">
+                                <input readonly style="max-width:40%" type="text" id="maxamount">
+                            </div>
+                        </div>
+                        <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                             data-min="50000" data-max="5000000">
+                            <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                        </div>
+                    </div>
+                    <a href="#" class="filter-btn">Reset</a>
+                    <a href="#" class="filter-btn">Filter</a>
+                </div>
+                <div class="filter-widget">
+                    <h4 class="fw-title">Color</h4>
+                    <div class="fw-color-choose">
+                        <div class="cs-item">
+                            <input type="radio" id="cs-black">
+                            <label class="cs-black" for="cs-black">Black</label>
+                        </div>
+                        <div class="cs-item">
+                            <input type="radio" id="cs-violet">
+                            <label class="cs-violet" for="cs-violet">Violet</label>
+                        </div>
+                        <div class="cs-item">
+                            <input type="radio" id="cs-blue">
+                            <label class="cs-blue" for="cs-blue">Blue</label>
+                        </div>
+                        <div class="cs-item">
+                            <input type="radio" id="cs-yellow">
+                            <label class="cs-yellow" for="cs-yellow">Yellow</label>
+                        </div>
+                        <div class="cs-item">
+                            <input type="radio" id="cs-red">
+                            <label class="cs-red" for="cs-red">Red</label>
+                        </div>
+                        <div class="cs-item">
+                            <input type="radio" id="cs-green">
+                            <label class="cs-green" for="cs-green">Green</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-widget">
+                    <h4 class="fw-title">Size</h4>
+                    <div class="fw-size-choose">
+                        <div class="sc-item">
+                            <input type="radio" id="s-size">
+                            <label for="s-size">s</label>
+                        </div>
+                        <div class="sc-item">
+                            <input type="radio" id="m-size">
+                            <label for="m-size">m</label>
+                        </div>
+                        <div class="sc-item">
+                            <input type="radio" id="l-size">
+                            <label for="l-size">l</label>
+                        </div>
+                        <div class="sc-item">
+                            <input type="radio" id="xs-size">
+                            <label for="xs-size">xs</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-widget">
+                    <h4 class="fw-title">Tags</h4>
+                    <div class="fw-tags">
+                        <a href="#">Towel</a>
+                        <a href="#">Shoes</a>
+                        <a href="#">Coat</a>
+                        <a href="#">Dresses</a>
+                        <a href="#">Trousers</a>
+                        <a href="#">Men's hats</a>
+                        <a href="#">Backpack</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 order-1 order-lg-2">
+                <div class="product-show-option">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7">
+                            <div class="advanced-search">
+                                <div class="input-group khung">
+                                    <input type="text" class="inputtext" placeholder="What do you need?">
+                                    <button type="button" class="btnSearch"><i class="ti-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 text-right">
+                            <p>Show 01- 09 Of 36 Product</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-list">
+                    <div class="row">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="product-item">
+                                    <div class="pi-pic">
+                                        <img src="~/content/@item.UrlPictureBg" />
+                                        <div class="sale pp-sale">Sale</div>
+                                        <div class="icon">
+                                            <i class="icon_heart_alt"></i>
+                                        </div>
+                                        <ul>
+                                            <li class="w-icon active"><a class="Add-to-Cart" data-id="@item.Id" style="cursor:pointer"><i class="icon_bag_alt"></i></a></li>
+                                            <li class="quick-view"><a href="@Url.Action("Details","Home",new{productId = item.Id})">+ Quick View</a></li>
+                                            <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="pi-text">
+                                        <div class="catagory-name">Towel</div>
+                                        <a href="#">
+                                            <h5>@item.Name</h5>
+                                        </a>
+                                        <div class="product-price">
+                                            $@item.NewPrice
+                                            <span>$@item.OldPrice</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="loading-more">
+                    <i class="icon_loading"></i>
+                    <a href="#">
+                        Loading More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

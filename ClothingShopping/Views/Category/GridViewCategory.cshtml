@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<ClothingShopping.Models.Category>
+@addTagHelper *, Syncfusion.EJ2
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="control-section">
+    <ejs-grid id="Grid" dataSource="@Model" allowPaging="true">
+        <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+        <e-grid-columns>
+            <e-grid-column field="Name" headerText="Category Name" width="150"></e-grid-column>
+            <e-grid-column field="Image" headerText="Image" width="130"></e-grid-column>
+            <e-grid-column field="Description" headerText="Description" width="120"></e-grid-column>
+            <e-grid-column headerText="Status" template="#StatusCategory" width="140"></e-grid-column>
+            <e-grid-column headerText="Action" template="#ActionCategory" width="140"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+
+</div>
+<script id="StatusCategory" type="text/x-template">
+    ${if(Status)}
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox"id="${Id}" checked onclick="ChangeStatus(${Id})">
+        </div>
+    ${else}
+        <div class="form-check form-switch">
+          <input class="form-check-input" id="${Id}" type="checkbox" onclick="ChangeStatus(${Id})">
+        </div>
+    ${/if}
+</script>
+
+<script id="ActionCategory" type="text/x-template">
+    <div class="Update">
+          <input class="Neluon" data-id="${Id}" type="hidden" value="${Id}" />
+          <a onclick="ShowInPopup2(${Id})" data-id="${Id}" class="btn btn-info IdLayLuon">Update</a>
+    </div>
+</script>

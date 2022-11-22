@@ -1,6 +1,9 @@
 ﻿using ClothingShopping.Areas.Identity.Data;
+using ClothingShopping.Common;
 using ClothingShopping.Models;
 using ClothingShopping.Repository;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.Common;
 using System.Data.Entity;
 using System.Linq.Expressions;
 
@@ -22,9 +25,13 @@ namespace ClothingShopping.Services
 
         public void Delete(int id);
         public bool CheckExistName(int id,string name);
+        public PagedResult<Category> GetPagingCategory(GetPagedRequest request);
+        public int GetCountByName(string Name);
 
         public void Delete(Category appRole);
         public void Save();
+        public string GetCategoryName(int Id);
+
     }
     public class CategoryService : ICategoryService
     {
@@ -41,6 +48,7 @@ namespace ClothingShopping.Services
             //Expression<Func<Category, bool>> expression = e => e.Name.Equals(category.Name);
 
             Expression<Func<Category, bool>> where = u => u.Name == name;
+
             if (id != 0)
             {
                 where = u => u.Id != id && u.Name == name;
@@ -111,6 +119,39 @@ namespace ClothingShopping.Services
         public IEnumerable<Category> GetAllByName(string Name)
         {
             return _category.GetAllByName(Name);
+        }
+
+        public PagedResult<Category> GetPagingCategory(GetPagedRequest request)
+        {
+            var query =  GetAll();
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(p => p.Name.Contains(request.Keyword));
+            }
+            //Paging
+
+            int TotalRow = query.Count();
+
+            var data = query.Skip((request.pageIndex - 1) * request.pageSize).Take(request.pageSize).ToList();
+
+            var pagedResult = new PagedResult<Category>()
+            {
+                TotalCount = TotalRow,
+                pageIndex = request.pageIndex,
+                PageSize = request.pageSize,
+                Items = data
+            };
+            return pagedResult;
+        }
+
+        public int GetCountByName(string Name)
+        {
+            return GetAllByName(Name).Count();
+        }
+
+        public string GetCategoryName(int Id)
+        {
+            return _category.GetCategoryName(Id);
         }
     }
 }

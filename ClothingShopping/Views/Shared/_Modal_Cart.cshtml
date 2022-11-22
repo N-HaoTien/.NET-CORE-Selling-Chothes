@@ -1,0 +1,52 @@
+﻿@model List<CartViewModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString("Cart");
+    var cart = jsoncart != null ? JsonConvert.DeserializeObject<List<CartViewModel>>(jsoncart) : new List<CartViewModel>();
+}
+@if(cart.Count > 0 )
+{
+    <div class="cart-hover">
+        <div class="select-items">
+            <style>
+                table#mytable td {
+                    border: none !important;
+                }
+            </style>
+            <table id="mytable">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="si-pic"><img src="~/Content/@item.urlPicture" style="width:70px" alt=""></td>
+                            <td class="si-text">
+                                <div class="product-selected">
+                                    <p> @String.Format(info, "{0:c}", item.Price)   x @item.Quantity</p>
+                                    <h6>@item.Name</h6>
+                                </div>
+                            </td>
+                            <td class="si-close Remove-item" onclick="Removeitem(@item.ProductId)" data-id="@item.ProductId">
+                                <i class="ti-close"></i>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="select-total">
+            <span>total:</span>
+            <h5 id="Total">@String.Format(info, "{0:c}", cart.Sum(p => p.ThanhTien)) </h5>
+        </div>
+        <div class="select-button">
+            <a href="@Url.Action("Index","Cart")" class="primary-btn view-card">VIEW CARD</a>
+            <a href="@Url.Action("Checkout","Cart")" class="primary-btn checkout-btn">CHECK OUT</a>
+        </div>
+    </div>
+}

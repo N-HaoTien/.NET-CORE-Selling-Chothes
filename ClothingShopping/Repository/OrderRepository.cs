@@ -5,7 +5,7 @@ namespace ClothingShopping.Repository
 {
     public interface IOrder : IRepository<Order>
     {
-        public Task<IEnumerable<Order>> GetListOrderbyUser(string UserId);
+        public List<Order> GetListOrderbyUser();
 
         public Task<IEnumerable<Order>> GetListOrderbyFromToDate(DateTime From, DateTime To);
 
@@ -13,16 +13,14 @@ namespace ClothingShopping.Repository
     }
     public class OrderRepository : RepositoryBase<Order>, IOrder
     {
-        public ApplicationDbContext DbContext;
 
         public OrderRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            DbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Order>> GetListOrderbyUser(string UserId)
+        public List<Order> GetListOrderbyUser()
         {
-            return await DbContext.Orders.Include(p => p.User).Where(p => p.UserId == UserId).ToListAsync();
+            return DbContext.Orders.OrderByDescending(p => p.CreatedDate).AsQueryable().ToList();
         }
         public async Task<IEnumerable<Order>> GetListOrderbyFromToDate(DateTime From, DateTime To)
         {

@@ -1,26 +1,165 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity;
+@using ClothingShopping.Services;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+@inject ClothingShopping.Services.IUserService userService
 
-<ul class="navbar-nav">
+@{
+    string userId = UserManager.GetUserId(_httpContextAccessor.HttpContext.User);
+    var user = userService.GetDetail(userId);
+}
+<style>
+    .header_dropdown {
+        text-align: right;
+        padding: 14px 0 0px;
+        position: relative;
+        width: 200px;
+    }
+
+        .header_dropdown a {
+            color: black;
+        }
+
+    .admin_content1 {
+        display: flex;
+        align-content: center;
+        margin-left: 15px;
+        width: 200px;
+        cursor: pointer;
+    }
+
+    .admin_content {
+        display: flex;
+        align-content: center;
+        cursor: pointer;
+        margin-left: 15px;
+        width: 200px;
+    }
+
+    .account_dropdown {
+        background-color: #252525;
+        position: absolute;
+        border-radius: 11px;
+        box-shadow: 0 5px 10px 0 rgb(255 0 0);
+        display: none;
+        z-index: 3;
+        border-radius: 11px;
+    }
+
+    .account_dropdown_item a {
+        display: block;
+        color: #ffffff;
+        padding: 15px 25px;
+        font-size: 12px;
+        text-align:left
+    }
+
+        .account_dropdown_item a:hover {
+            background-color: #ff8d2c;
+            color: #fff;
+        }
+
+        .account_dropdown_item a i {
+            line-height: 1;
+            margin-right: 20px;
+            font-size: 18px;
+            vertical-align: auto;
+        }
+
+    .account_dropdown_body {
+        padding: 15px 0;
+        background-color: #252525;
+        border: 2px solid;
+        border-radius: 25px;
+    }
+</style>
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+    <div class="col-lg-1">
+        <div class="header_dropdown">
+            <div class="admin_content">
+                <span class="icon_profile"></span>
+                @user.Name
+                <i class='fa-solid fa-circle-chevron-down red-color' style="margin-left:5px;margin-top:3px"></i>
+            </div>
+            <div class="account_dropdown">
+                <div class="account_dropdown_body">
+                    <div class="account_dropdown_item">
+                        <a href="@Url.Action("Details","Users",new {userId = user.Id})">
+                            <i class="fa-solid fa-user"></i>
+                            Profile Account
+                        </a>
+                    </div>
+                    <div class="account_dropdown_item">
+                        <a href="@Url.Action("ChangePassword","Users",new{userId = user.Id})">
+                            <i class="fa-solid fa-key"></i>
+                            Change Password
+                        </a>
+                    </div>
+                    <div class="account_dropdown_item">
+                        <a href="@Url.Action("Orders","Users",new {userId = user.Id})">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            Order
+                        </a>
+                    </div>
+                    <div class="account_dropdown_item">
+                        <a href="" onclick="LogOut('@Url.Action("Index","Home")')">
+                            <i class='fa fa-sign-out'></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="list__select">
+        @*<i class="fa-solid fa-bell" style="background:green"></i>
+    <i class="fa-solid fa-message" style="background:green"></i>
+        <a href="#" id="profile">
+            <img class="profile-pic" src="~/image-icon/tien.jpg" />
+            <p class="profile-name"> @user.Name</p>
+        </a>
+        <div class="list_container">
+            <div class="list-open">
+                <div class="list_item" style="margin-right :110px">
+                    <div class="list_content">
+                        <a asp-area="User" asp-controller="Users" asp-action="Detail" asp-route-Name="@user.Name" class="list_selected">
+                            <div class="list-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="list-content">
+                                <h6>Profile</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="list_content">
+
+                        <a onclick="LogOut('@Url.Action("Index","Category")')" class="list_selected">
+                            <div class="list-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="list-content">
+                                <h6>LogOut</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+    <div class="col-lg-1">
+        <div class="header_dropdown">
+            <div class="admin_content1">
+                <a href="~/Identity/Account/Login">
+                    <span class="icon_profile"></span>
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
 }
-</ul>

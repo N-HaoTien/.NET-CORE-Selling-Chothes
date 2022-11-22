@@ -1,0 +1,90 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    List<Object> menuItems = new List<Object>();
+    menuItems.Add(new
+    {
+        text = "A",
+        separator = true
+    });
+    menuItems.Add(new
+    {
+        text = "Category",
+        url = "/Category/Index",
+        iconCss = "fa-solid fa-box"
+    });
+    menuItems.Add(new
+    {
+        text = "Size",
+        url = "/Size/Index",
+        iconCss = "fa-solid fa-box"
+    });
+    menuItems.Add(new
+    {
+        text = "Product",
+        url = "/Product/Index",
+        iconCss = "fa-solid fa-box"
+    });
+    menuItems.Add(new
+    {
+        text = "Chat",
+        url = "/Chat/Index",
+        iconCss = "fa-solid fa-box"
+    });
+    menuItems.Add(new
+    {
+        text = "Order",
+        url = "/Order/Index",
+        iconCss = "fa-solid fa-box"
+    });
+    menuItems.Add(new
+    {
+        text = "B",
+        separator = true
+    });
+    menuItems.Add(new
+    {
+        text = "Users",
+        url = "/Users/Index",
+        iconCss = "fa-solid fa-box"
+
+    });
+    menuItems.Add(new
+    {
+        text = "Roles",
+        url = "/Users/ListRoles",
+        iconCss = "fa-solid fa-chart-simple"
+
+    });
+    menuItems.Add(new
+    {
+        text = "Report",
+        url = "/Report/Index",
+        iconCss = "fa-solid fa-chart-simple"
+
+    });
+}
+<ejs-sidebar id="sidebar" width="290px" enableDock dockSize="100px">
+    <e-content-template>
+        <div class="logo-wrapper">
+            <div class="app-logo">
+                <div class="form-check form-switch">
+                    <input id="btn-switch" class="form-check-input alert-success border border-2" style="width:50px;height:20px; color:black" type="checkbox" >
+                </div>
+            </div>
+            <div class="w-100">
+            </div>
+            <i id="sidebar-toggle" class="fa-solid text-black"></i>
+        </div>
+        <div class="profile-wrapper">
+            <img class="profile-pic" src="~/image-icon/tien.jpg" />
+            <div class="titles d-flex flex-column ps-3">
+                <h6 id="SideBar_YourName" class="mb-0 text-white">YourName</h6>
+                <span id="SideBar_Permission" class="text-muted">Permission</span>
+            </div>
+        </div>
+        <ejs-menu id="menu" items="menuItems" orientation="Vertical" hamburgerMode> </ejs-menu>
+    </e-content-template>
+</ejs-sidebar>
+

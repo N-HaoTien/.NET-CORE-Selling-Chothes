@@ -17,7 +17,7 @@ namespace ClothingShopping.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -31,7 +31,6 @@ namespace ClothingShopping.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
@@ -50,7 +49,6 @@ namespace ClothingShopping.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Imgage")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -119,7 +117,6 @@ namespace ClothingShopping.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
@@ -136,6 +133,33 @@ namespace ClothingShopping.Migrations
                         .IsUnique();
 
                     b.ToTable("Category", (string)null);
+                });
+
+            modelBuilder.Entity("ClothingShopping.Models.Chatting", b =>
+                {
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("ToUserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("FromUserId", "ToUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("Chatting", (string)null);
                 });
 
             modelBuilder.Entity("ClothingShopping.Models.Comment", b =>
@@ -182,18 +206,29 @@ namespace ClothingShopping.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CheckerUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 8, 5, 1, 17, 32, 315, DateTimeKind.Local).AddTicks(2037));
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsPayBill")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReceivedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RejectContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("StatusName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Total")
@@ -203,10 +238,9 @@ namespace ClothingShopping.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("receiveddate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CheckerUserId");
 
                     b.HasIndex("UserId");
 
@@ -240,11 +274,25 @@ namespace ClothingShopping.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortPicture")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Picture", (string)null);
                 });
@@ -272,14 +320,18 @@ namespace ClothingShopping.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<double>("NewPrice")
+                        .HasColumnType("float");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<double>("OldPrice")
+                        .HasColumnType("float");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UrlPictureBg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -289,21 +341,6 @@ namespace ClothingShopping.Migrations
                         .IsUnique();
 
                     b.ToTable("Product", (string)null);
-                });
-
-            modelBuilder.Entity("ClothingShopping.Models.ProductPicture", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PictureId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "PictureId");
-
-                    b.HasIndex("PictureId");
-
-                    b.ToTable("ProductPictures");
                 });
 
             modelBuilder.Entity("ClothingShopping.Models.ProductSize", b =>
@@ -335,14 +372,11 @@ namespace ClothingShopping.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Size", (string)null);
                 });
@@ -480,6 +514,25 @@ namespace ClothingShopping.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ClothingShopping.Models.Chatting", b =>
+                {
+                    b.HasOne("ClothingShopping.Models.ApplicationUser", "FromUser")
+                        .WithMany("MessagesFrom")
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ClothingShopping.Models.ApplicationUser", "ToUser")
+                        .WithMany("MessagesTo")
+                        .HasForeignKey("ToUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("ClothingShopping.Models.Comment", b =>
                 {
                     b.HasOne("ClothingShopping.Models.Product", "Product")
@@ -501,11 +554,17 @@ namespace ClothingShopping.Migrations
 
             modelBuilder.Entity("ClothingShopping.Models.Order", b =>
                 {
+                    b.HasOne("ClothingShopping.Models.ApplicationUser", "CheckerUser")
+                        .WithMany("CheckerOrders")
+                        .HasForeignKey("CheckerUserId");
+
                     b.HasOne("ClothingShopping.Models.ApplicationUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CheckerUser");
 
                     b.Navigation("User");
                 });
@@ -529,6 +588,17 @@ namespace ClothingShopping.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ClothingShopping.Models.Picture", b =>
+                {
+                    b.HasOne("ClothingShopping.Models.Product", "Products")
+                        .WithMany("Pictures")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("ClothingShopping.Models.Product", b =>
                 {
                     b.HasOne("ClothingShopping.Models.Category", "Category")
@@ -538,25 +608,6 @@ namespace ClothingShopping.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ClothingShopping.Models.ProductPicture", b =>
-                {
-                    b.HasOne("ClothingShopping.Models.Picture", "Picture")
-                        .WithMany("ProductPictures")
-                        .HasForeignKey("PictureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClothingShopping.Models.Product", "Product")
-                        .WithMany("ProductPictures")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Picture");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ClothingShopping.Models.ProductSize", b =>
@@ -642,7 +693,13 @@ namespace ClothingShopping.Migrations
 
             modelBuilder.Entity("ClothingShopping.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("CheckerOrders");
+
                     b.Navigation("Comments");
+
+                    b.Navigation("MessagesFrom");
+
+                    b.Navigation("MessagesTo");
 
                     b.Navigation("Orders");
                 });
@@ -659,18 +716,13 @@ namespace ClothingShopping.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("ClothingShopping.Models.Picture", b =>
-                {
-                    b.Navigation("ProductPictures");
-                });
-
             modelBuilder.Entity("ClothingShopping.Models.Product", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("OrderItems");
 
-                    b.Navigation("ProductPictures");
+                    b.Navigation("Pictures");
 
                     b.Navigation("ProductSizes");
                 });

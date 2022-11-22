@@ -1,0 +1,207 @@
+﻿@model List<CartViewModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+    Layout = null;
+}
+<style>
+        .cart-table table tr td.qua-col .pro-qty2 {
+        width: 123px;
+        height: 46px;
+        border: 2px solid #ebebeb;
+        padding: 0 15px;
+        float: left;
+    }
+        .cart-table table tr td.qua-col .pro-qty2 input {
+        text-align: center;
+        width: 52px;
+        font-size: 14px;
+        font-weight: 700;
+        border: none;
+        color: #4c4c4c;
+        line-height: 40px;
+        float: left;
+    }
+        cart-table table tr td.qua-col .pro-qty2 .qtybtn.dec {
+        font-size: 30px;
+    }
+    .cart-table table tr td.qua-col .pro-qty2 .qtybtn {
+        font-size: 24px;
+        color: #b2b2b2;
+        float: left;
+        line-height: 38px;
+        cursor: pointer;
+        width: 18px;
+    }
+        .cart-table table tr td.qua-col .pro-qty2 .qtybtn {
+        font-size: 24px;
+        color: #b2b2b2;
+        float: left;
+        line-height: 38px;
+        cursor: pointer;
+        width: 18px;
+    }
+</style>
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="cart-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th class="p-name">Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th><i class="ti-close"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="GetProductId">
+                                    <td class="cart-pic first-row"><img src="~/Content/@item.urlPicture" style="max-width:60%" alt=""></td>
+                                    <td class="cart-title first-row">
+                                        <h5>@item.Name</h5>
+                                    </td>
+                                    <td class="p-price first-row">@String.Format(info, "{0:c}", item.Price)</td>
+                                    <td class="qua-col first-row">
+                                        <div class="quantity">
+                                            <div class="pro-qty2 ">
+                                                <span class="dec qtybtn">-</span>
+
+                                                <input type="text" class="QuantityProduct" data-itemid="@item.ProductId" value="@item.Quantity">
+
+                                                <span class="inc qtybtn">+</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="total-price first-row">@String.Format(info, "{0:c}", item.ThanhTien)</td>
+                                    <td class="close-td first-row"><div onclick="Removeitem(@item.ProductId)"><i class="ti-close"></i></div></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="cart-buttons">
+                            <a href="#" class="primary-btn continue-shop">Continue shopping</a>
+                            <a href="#" class="primary-btn up-cart">Update cart</a>
+                        </div>
+                        <div class="discount-coupon">
+                            <h6>Discount Codes</h6>
+                            <form action="#" class="coupon-form">
+                                <input type="text" placeholder="Enter your codes">
+                                <button type="submit" class="site-btn coupon-btn">Apply</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 offset-lg-4">
+                        <div class="proceed-checkout">
+                            <ul>
+                                @*<li class="subtotal">Subtotal <span>$240.00</span></li>*@
+                                <li class="cart-total">Total <span><div id="SumTotalCartIndex">@String.Format(info, "{0:c}", Model.Sum(p => p.ThanhTien))</div> </span></li>
+                            </ul>
+                            <a href="~/Cart/Checkout" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".dec.qtybtn").click(function (e) {
+            e.preventDefault();
+            console.log('Check');
+            // Get Id theo hàng
+            var ProductId = $(this).closest(".GetProductId").find(".QuantityProduct").data("itemid");
+
+            let Quantity = $(this).closest(".GetProductId").find(".QuantityProduct").val();
+
+            $.ajax({
+                type: 'Post',
+                url: '/Cart/UpdateCart',
+                data: {
+                    productId: ProductId,
+                    quantity: --Quantity
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                    $("#Modal-cart").html(data.modalCart);
+                    $("#SumItemsModal").html(data.sumItems);
+                    $("#TotalModal").html(data.total);
+                    $("#CartIndex").html(data.cartIndex);
+                    $("#SumTotalCartIndex").html(data.total);
+                    toastr.options =
+                    {
+                        "closeButton": true,
+                        "progressBar": true
+                    }
+                    toastr.success("Bạn Đã Sửa Sản Phẩm trong giỏ hàng", "Thông Báo");
+                },
+                error: function () {
+                    alert("Lỗi trong khi thêm vào giỏ hàng!");
+                }
+            });
+        });
+        $(".inc.qtybtn").click(function (e) {
+            e.preventDefault();
+            console.log('Check');
+            // Get Id theo hàng
+            var ProductId = $(this).closest(".GetProductId").find(".QuantityProduct").data("itemid");
+
+            let Quantity = $(this).closest(".GetProductId").find(".QuantityProduct").val();
+
+            $.ajax({
+                type: 'Post',
+                url: '/Cart/UpdateCart',
+                data: {
+                    productId: ProductId,
+                    quantity: ++Quantity
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                    $("#Modal-cart").html(data.modalCart);
+                    $("#SumItemsModal").html(data.sumItems);
+                    $("#TotalModal").html(data.total);
+                    $("#CartIndex").html(data.cartIndex);
+                    $("#SumTotalCartIndex").html(data.total);
+                    toastr.options =
+                    {
+                        "closeButton": true,
+                        "progressBar": true
+                    }
+                    toastr.success("Bạn Đã Sửa Sản Phẩm trong giỏ hàng", "Thông Báo");
+                },
+                error: function () {
+                    alert("Lỗi trong khi thêm vào giỏ hàng!");
+                }
+            });
+        });
+    });
+    var proQty = $('.pro-qty2');
+    proQty.on('click', '.qtybtn', function () {
+        var $button = $(this);
+        var oldValue = $button.parent().find('input').val();
+        if ($button.hasClass('inc')) {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {}});
+                    // Don't allow decrementing below zero
+
+</script>

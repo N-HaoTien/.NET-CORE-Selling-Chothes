@@ -1,0 +1,80 @@
+﻿@model PagedResultBase
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    var urlTemplate = Url.Action() + "?pageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageIndex")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+    var startIndex = Math.Max(Model.pageIndex - 3, 1);
+    var endIndex = Math.Min(Model.pageIndex + 3, Model.PageCount);
+
+}
+
+@if (Model.PageCount > 1)
+{
+    <ul class="pagination Productpagination" id="pageCurrent" data-pageIndex="@Model.pageIndex">
+        @*<p class="text-primary">Tổng @Model.TotalCount</p>*@
+        @if (Model.pageIndex != startIndex)
+        {
+            <li class="page-item ">
+                @*href="@urlTemplate.Replace("{0}","1")"*@
+                <a class="page-link" href="" title="1" tabindex="-1" data-page="@Model.pageIndex">First</a>
+            </li>
+            <li class="page-item ">
+                @*href="@urlTemplate.Replace("{0}",(Model.pageIndex -1).ToString())"*@
+                <a class="page-link" href="" data-page="@(Model.pageIndex - 1)" tabindex="-1">Previous</a>
+            </li>
+        }
+        @for (int i = startIndex; i <= endIndex; i++)
+        {
+            if (i == Model.pageIndex)
+            {
+                <li class="page-item active">
+                    <a class="page-link" data-page="@Model.pageIndex" href="#">@i <span class="sr-only">(current)</span></a>
+                </li>
+            }
+            else
+            {
+                @*href="@urlTemplate.Replace("{0}",i.ToString())"*@
+                <li class="page-item ">
+                    <a data-page="@i" href="" title="Trang @i" class="page-link">@i</a>
+                </li>
+            }
+        }
+        @if (Model.pageIndex != endIndex)
+        {
+            @*href="@urlTemplate.Replace("{0}",(Model.pageIndex +1).ToString())"*@
+            <li class="page-item">
+                <a data-page="@(Model.pageIndex + 1)" href="" title="@Model.PageCount.ToString()" class="page-link">Next</a>
+            </li>
+            @*href="@urlTemplate.Replace("{0}",Model.PageCount.ToString())"*@
+            <li class="page-item">
+                <a data-page="@(Model.PageCount)" href="" class="page-link">Cuối</a>
+            </li>
+
+        }
+    </ul>
+}
+else
+{
+
+}

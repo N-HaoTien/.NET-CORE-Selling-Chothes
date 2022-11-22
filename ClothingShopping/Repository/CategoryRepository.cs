@@ -9,14 +9,12 @@ namespace ClothingShopping.Repository
         public void ChangeStatusCategory(int? Id);
         public IEnumerable<Category> GetAllByName(string Name);
 
+        public string GetCategoryName(int Id);
     }
     public class CategoryRepository : RepositoryBase<Category>,ICategory
     {
-        public ApplicationDbContext DbContext;
-
         public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            DbContext = dbContext;
         }
         public void ChangeStatusCategory(int? Id)
         {
@@ -27,9 +25,12 @@ namespace ClothingShopping.Repository
         public IEnumerable<Category> GetAllByName(string Name)
         {
             Expression<Func<Category, bool>> where = u => u.Name.Contains(Name);
-            return GetMany(where, null);
+            return GetMany(where,null);
         }
 
-
+        public string GetCategoryName(int Id)
+        {
+            return GetSingleById(Id).Name;
+        }
     }
 }

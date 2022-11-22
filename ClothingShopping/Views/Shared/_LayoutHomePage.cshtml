@@ -1,0 +1,150 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Fashi Template">
+    <meta name="keywords" content="Fashi, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fashi | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/home-page/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/home-page/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/themify-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/owl.carousel.min.css" type="text/css">
+    <link href="~/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/home-page/css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/home-page/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/home-page/css/slicknav.min.css" type="text/css">
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    @Html.Partial("HeaderHomePage")
+    <!-- Header End -->
+    @RenderBody()
+    <div class="modal" tabindex="-1" role="dialog" id="form-modal-Items">
+        <div class="modal-dialog" style="margin-left: 180px" ; >
+            <div class="modal-content" style="width:1200px;" >
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close black" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Section Begin -->
+    @Html.Partial("FooterHomePage")
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script src="~/home-page/js/jquery-3.3.1.min.js"></script>
+    <script src="~/home-page/js/bootstrap.min.js"></script>
+    <script src="~/home-page/js/jquery-ui.min.js"></script>
+    <script src="~/home-page/js/jquery.countdown.min.js"></script>
+    <script src="~/home-page/js/jquery.nice-select.min.js"></script>
+    <script src="~/home-page/js/jquery.zoom.min.js"></script>
+    <script src="~/js/cart.js"></script>
+    @*<script src="~/js/site.js"></script>*@
+    <script src="~/js/shopping.js"></script>
+    <script src="~/home-page/js/jquery.dd.min.js"></script>
+    <script src="~/home-page/js/jquery.slicknav.js"></script>
+    <script src="~/home-page/js/owl.carousel.min.js"></script>
+    <script src="~/toastr/toastr.min.js"></script>
+    <script src="~/home-page/js/Shop.js"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('.admin_content').on('click', function (event) {
+                event.preventDefault();
+                $(this).closest('.header_dropdown').find('.account_dropdown').toggle();
+            });
+        });
+        function Removeitem(Id) {
+
+            $.ajax({
+                type: 'Post',
+                url: '/Cart/Remove',
+                data: {
+                    productId: Id
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#Modal-cart").html(data.modalCart);
+                    $("#SumItemsModal").html(data.sumItems);
+                    $("#TotalModal").html(data.total);
+                    $("#CartIndex").html(data.cartIndex);
+                    $("#SumTotalCartIndex").html(data.total);
+                    toastr.options =
+                    {
+                        "closeButton": true,
+                        "progressBar": true
+                    }
+                    toastr.success("Bạn Đã Xoas Sản Phẩm trong giỏ hàng", "Thông Báo");
+                },
+                error: function () {
+                    alert("Lỗi trong khi thêm vào giỏ hàng!");
+                }
+            });
+            return false;
+        }
+        function LogOut(url) {
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: '/Users/LogOut?returnUrl=' + url,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isSuccess) {
+                            console.log(res);
+                            window.location.href = res.url;
+
+                        }
+
+                        else {
+                            console.log(res)
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+
+                })
+            }
+            catch (e) {
+                console.log(e);
+            }
+
+            return false;
+        }
+    </script>
+</body>
+
+</html>

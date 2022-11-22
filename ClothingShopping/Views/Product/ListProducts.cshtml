@@ -1,0 +1,64 @@
+﻿@model PagedResult<Product>
+@inject ICategoryService _categorySerive;
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+    //GetCategoryName
+}
+
+<h1>Index</h1>
+<a asp-action="AddorUpdate" asp-route-id="0">Create</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                CreatedDate
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Category
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewPrice)
+                </td>
+                <td>
+                    @_categorySerive.GetCategoryName(item.CategoryId)
+                </td>
+                <td>
+                    <a asp-action="AddorUpdate" asp-route-id="@item.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

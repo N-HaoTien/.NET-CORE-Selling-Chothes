@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ClothingShopping.ViewModel.UsertoRoleViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="btn btn-success" asp-action="CreateRoles">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserClaim)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserClaim)
+                </td>
+                <td>
+                    <a asp-action="UpdateUserToRole" asp-route-userId="@item.UserId">EditRoles</a> 
+                </td>
+                <td>
+                    <a asp-action="ManageUserClaims" asp-route-userId="@item.UserId">EditRoles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Product>
+
+<h2>@ViewBag.Test</h2>
+<table id="Email">
+
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.NewPrice
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+
+<style type="text/css">
+    table#Email td {
+        border: none !important;
+    }
+</style>

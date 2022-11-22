@@ -16,7 +16,6 @@ D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.AspNetCo
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
-D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.Build.Locator.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.CodeAnalysis.AnalyzerUtilities.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.CodeAnalysis.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -363,7 +362,6 @@ D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Ext
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.Configuration.UserSecrets.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.Configuration.Xml.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.DependencyInjection.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.Diagnostics.HealthChecks.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\refs\Microsoft.Extensions.Features.dll
@@ -571,3 +569,12 @@ D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\runtimes\win\lib\n
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Syncfusion.EJ2.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Syncfusion.Licensing.dll
 D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\SlugGenerator.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\libman.json
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.Build.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.Build.Framework.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\Microsoft.NET.StringTools.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\RazorEngine.NetCore.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\PayPal.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\PayPalCheckoutSdk.dll
+D:\DOAN_HE\ClothingShopping\ClothingShopping\bin\Debug\net6.0\PayPalHttp-Dotnet.dll

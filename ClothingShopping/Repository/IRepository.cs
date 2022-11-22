@@ -2,7 +2,7 @@
 
 namespace ClothingShopping.Repository
 {
-    public interface IRepository <T> where T : class
+    public interface IRepository<T> where T : class
     {
         void Add(T entity);
 
@@ -15,6 +15,9 @@ namespace ClothingShopping.Repository
 
         //Delete multi records
         void DeleteMulti(Expression<Func<T, bool>> where);
+        void AddMulti(IEnumerable<T> values);
+        void DeleteRange(List<T> obj);
+
         bool CheckUniqueName(Expression<Func<T, bool>> where);
 
 

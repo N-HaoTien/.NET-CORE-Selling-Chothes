@@ -12,15 +12,18 @@ namespace ClothingShopping.Models
 
         public string Name { get; set; }
         [Required]
+        public string UrlPictureBg { get; set; }
+        [Required]
         public string Description { get; set; }
         [Required]
         public bool Status { get; set; }
+        [NotMapped]
+        public string CategoryName { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public int Quantity { get; set; }
         [Required]
-        [Range(0,int.MaxValue,ErrorMessage = "Giá Trị Phải Lớn Hơn 0")]
-        public int Price { get; set; }
+        public double NewPrice { get; set; }
+        public double OldPrice { get; set; }
 
         public virtual Category Category { get; set; }
         [Required]
@@ -29,7 +32,8 @@ namespace ClothingShopping.Models
 
         public virtual List<OrderItem> OrderItems { get; set; }
 
-        public virtual List<ProductPicture> ProductPictures { get; set; }
+        public virtual List<Picture> Pictures { get; set; }
+        
 
         public virtual List<Comment> Comments { get; set; }
 

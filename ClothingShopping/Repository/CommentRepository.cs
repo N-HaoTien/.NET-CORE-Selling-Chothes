@@ -11,11 +11,8 @@ namespace ClothingShopping.Repository
     }
     public class CommentRepository : RepositoryBase<Comment>, IComment
     {
-        public ApplicationDbContext DbContext;
-
         public CommentRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            DbContext = dbContext;
         }
         public async Task<IEnumerable<Comment>> GetListCommentIncludeAllUserbyProduct(int Id)
         {

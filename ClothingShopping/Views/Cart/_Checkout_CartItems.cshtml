@@ -1,0 +1,53 @@
+﻿@model CheckoutViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+    Layout = null;
+}
+
+<div class="col-lg-6">
+@*    <div class="checkout-content">
+        <input type="text" placeholder="Enter Your Coupon Code">
+    </div>*@
+    
+    <div class="place-order">
+        <h4>Your Order</h4>
+        <div class="order-total">
+            <ul class="order-table">
+                <li>Product <span>Total</span></li>
+                
+                @foreach (var item in Model.Cart)
+                {
+                    <input asp-for="@item.Name" type="hidden" />
+                    <input asp-for="@item.Quantity" type="hidden" />
+                    <input asp-for="@item.Price" type="hidden" />
+
+                    <input asp-for="@item.ProductId" type="hidden" />
+                    <input asp-for="@item.ThanhTien" type="hidden" />
+                    <li class="fw-normal">
+                        @item.Name x @item.Quantity
+                        <span >@String.Format(info, "{0:c}", item.ThanhTien)</span>
+                        <p style="margin:auto !important">@String.Format(info, "{0:c}", item.Price)</p>
+
+                    </li>
+                }
+                <li class="total-price">Total <span>@String.Format(info, "{0:c}", Model.Cart.Sum(p =>p.ThanhTien))</span></li>
+            </ul>
+            <div class="payment-check">
+                <div class="pc-item">
+                    <label for="pc-paypal">
+                        Paypal
+                        <input type="checkbox" asp-for="IsCheckedPayment" id="pc-paypal">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="order-btn">
+                <button type="submit" class="site-btn place-btn" onclick="SubmitCheckout()">Place Order</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,12 @@
 ﻿using ClothingShopping.Models;
 using ClothingShopping.Repository;
+using ClothingShopping.ViewModel;
+
 namespace ClothingShopping.Services
 {
     public interface IUserService
     {
-        public ApplicationUser GetDetail(int id);
+        public ApplicationUser GetDetail(string id);
 
         public void Add(ApplicationUser ApplicationUser);
 
@@ -13,7 +15,8 @@ namespace ClothingShopping.Services
         public void Delete(int id);
 
         public void Delete(ApplicationUser ApplicationUser);
-        public IEnumerable<ApplicationUser> GetListApplicationUserByGroupId(string groupId);
+        public IEnumerable<UsertoRoleViewModel> GetListApplicationUserByGroupId();
+        public IEnumerable<ApplicationUser> GetAll();
 
         public void Save();
     }
@@ -22,18 +25,22 @@ namespace ClothingShopping.Services
         public IUser _ApplicationUser;
         public IUnitOfWork _unitOfWork;
 
-        public UserService(IUser _ApplicationUser, IUnitOfWork unitOfWork)
+        public UserService(IUser ApplicationUser, IUnitOfWork unitOfWork)
         {
-            _ApplicationUser = _ApplicationUser;
+            _ApplicationUser = ApplicationUser;
             _unitOfWork = unitOfWork;
         }
-        public IEnumerable<ApplicationUser> GetListApplicationUserByGroupId(string Id)
+        public IEnumerable<UsertoRoleViewModel> GetListApplicationUserByGroupId()
         {
-            return _ApplicationUser.GetListUserByGroupId(Id);
+            return _ApplicationUser.GetListUserByGroupId();
         }
-        public ApplicationUser GetDetail(int id)
+        public IEnumerable<ApplicationUser> GetAll()
         {
-            return _ApplicationUser.GetSingleById(id);
+            return _ApplicationUser.GetAll();
+        }
+        public ApplicationUser GetDetail(string id)
+        {
+            return _ApplicationUser.GetDetail(id);
         }
 
         public void Add(ApplicationUser ApplicationUser)

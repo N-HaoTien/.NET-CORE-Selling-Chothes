@@ -1,0 +1,38 @@
+﻿@model OrderOfUserViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    Layout = "~/Views/Shared/_LayoutHomePage.cshtml";
+
+}
+@Html.Partial("_Orders",Model)
+
+
+<script>
+
+    ShowPopupOrderItems = (Id) => {
+        $.ajax({
+            type: "GET",
+            url: '/Users/OrderDetails?OrderId=' + Id,
+            success: function (res) {
+                $("#form-modal-Items .modal-body").html(res);
+                $("#form-modal-Items").modal('show');
+                console.log("Link là " + url)
+            }
+        })
+    }
+        //ShowInPopup = (url, title) => {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: url,
+        //        success: function (res) {
+        //            $("#form-modal .modal-body").html(res);
+        //            $("#form-modal .modal-title").html(title);
+        //            $("#form-modal").modal('show');
+        //            console.log("Link là " + url)
+        //        }
+        //    })
+        //}
+</script>

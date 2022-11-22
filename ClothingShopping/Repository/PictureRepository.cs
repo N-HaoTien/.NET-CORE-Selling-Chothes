@@ -6,15 +6,18 @@ namespace ClothingShopping.Repository
 {
     public interface IPicture : IRepository<Picture>
     {
-
+        public List<Picture> GetPictureByProductId(int ProductId);
     }
     public class PictureRepository : RepositoryBase<Picture>, IPicture
     {
-        public ApplicationDbContext DbContext;
 
         public PictureRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            DbContext = dbContext;
+        }
+
+        public List<Picture> GetPictureByProductId(int ProductId)
+        {
+            return DbContext.Pictures.Where(p => p.ProductId == ProductId).ToList();
         }
     }
 }

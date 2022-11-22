@@ -8,12 +8,15 @@ namespace ClothingShopping.Services
         public Picture GetDetail(int id);
 
         public void Add(Picture Picture);
+        public void AddRange(List<Picture> pictures);
+        public void RemoveRange(List<Picture> pictures);
 
-        public void Update(Picture Picture);
+        public void Update(List<Picture> pictures);
 
         public void Delete(int id);
 
         public void Delete(Picture Picture);
+        public List<Picture> GetPictureByProductId(int ProductId);
 
         public void Save();
     }
@@ -22,10 +25,10 @@ namespace ClothingShopping.Services
         public IPicture _Picture;
         public IUnitOfWork _unitOfWork;
 
-        public PictureService(IComment _comment, IUnitOfWork unitOfWork)
+        public PictureService(IUnitOfWork unitOfWork, IPicture picture)
         {
-            _comment = _comment;
             _unitOfWork = unitOfWork;
+            _Picture = picture;
         }
         public IEnumerable<Picture> GetAll()
         {
@@ -49,13 +52,33 @@ namespace ClothingShopping.Services
             Save();
         }
 
-        public void Update(Picture Picture)
+        public void Update(List<Picture> pictures)
         {
-            _Picture.Update(Picture); Save();
+            
+            RemoveRange(pictures);
+
+            AddRange(pictures);
+
+            Save();
         }
         public Picture GetDetail(int id)
         {
             return _Picture.GetSingleById(id);
+        }
+
+        public void AddRange(List<Picture> pictures)
+        {
+            _Picture.AddMulti(pictures);
+        }
+
+        public void RemoveRange(List<Picture> pictures)
+        {
+            _Picture.DeleteRange(pictures);
+        }
+
+        public List<Picture> GetPictureByProductId(int ProductId)
+        {
+            return _Picture.GetPictureByProductId(ProductId);
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿@model PagedResult<Category>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Nhập loại cần tìm ..." aria-label="Default" aria-describedby="inputGroup-sizing-default" id="NameCategory">
+    <a onclick="SearchCategory()" class="btn btn-outline-secondary text-primary">Search</a>
+</div>
+<div id="View_All_Category">
+    @Html.Partial("ListCategory",Model)
+</div>
+<div id="ComponentCategory">
+    @*@await Component.InvokeAsync("Pager",Model)*@
+    @Html.Partial("DefaultPaginationCategory",Model)
+</div>

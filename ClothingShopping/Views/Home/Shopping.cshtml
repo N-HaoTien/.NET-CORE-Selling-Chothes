@@ -1,0 +1,62 @@
+﻿@model PagedResult<Product>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_LayoutHomePage.cshtml";
+}
+<link href="~/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/toastr/toastr.css" rel="stylesheet" />
+@Html.Partial("_Shopping")
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/js/toastr.min.js"></script>
+<script>
+    var jsTempDataSuccess = '@TempData["Message"]';
+    $(document).ready(function () 
+    {
+    @if (TempData.ContainsKey("Message"))
+    {
+        @:toastr.success("Message Sent Successfully", "Thông báo");
+    }
+
+    })
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $(".Add-to-Cart").click(function (e) {
+            e.preventDefault();
+            console.log('Check');
+
+            $.ajax({
+                type: 'Post',
+                url: '/Cart/AddToCart',
+                data: {
+                    productId: $(this).data("id"),
+
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                    $("#Modal-cart").html(data.modalCart);
+                    $("#SumItemsModal").html(data.sumItems);
+                    $("#TotalModal").html(data.total);
+                    toastr.options =
+                    {
+                        "closeButton": true,
+                        "progressBar": true
+                    }
+                    toastr.success("Bạn Đã Thêm Sản Phẩm vào giỏ hàng", "Thông Báo");
+                },
+                error: function () {
+                    alert("Lỗi trong khi thêm vào giỏ hàng!");
+                }
+            });
+            return false;
+        });
+
+    });
+
+</script>

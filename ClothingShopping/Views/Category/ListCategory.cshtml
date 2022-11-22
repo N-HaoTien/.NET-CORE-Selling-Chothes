@@ -1,0 +1,58 @@
+﻿@model PagedResult<Category>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData["Title"] = "Category";
+    Layout = null;
+
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Syncfusion.EJ2
+
+<table class="table" id="Tbl-text-color">
+    <thead>
+        <tr>
+            <th>
+                Icon
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Status
+            </th>
+            <th><a onclick="ShowInPopup('@Url.Action("AddorUpdate","Category",null,Context.Request.Scheme)','New Category')" class="btn btn-success text-white">Thêm đc dùm cái</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr id="@item.Id">
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" onclick="ChangeStatus(@item.Id)" id="@item.Id" @(item.Status == true ? "checked" : "") />
+                    </div>
+                </td>
+                <td>
+                    <a onclick="ShowInPopup('@Url.Action("AddorUpdate","Category",new{id = item.Id}, Context.Request.Scheme)','Update Category')" class="btn btn-info">Edit</a> | |
+                    <a class="btn btn-danger" onclick="DeleteCategory('@Url.Action("DeleteConfirmed","Category",new{id = item.Id})','@item.Name')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

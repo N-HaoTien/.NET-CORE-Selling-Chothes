@@ -1,4 +1,5 @@
 ﻿using ClothingShopping.Areas.Identity.Data;
+using ClothingShopping.Repository.Infrastructure;
 using System.Data.Entity;
 using System.Linq.Expressions;
 
@@ -8,14 +9,25 @@ namespace ClothingShopping.Repository
     {
         private ApplicationDbContext dataContext;
 
-        public RepositoryBase(ApplicationDbContext context)
+        protected RepositoryBase(ApplicationDbContext context)
         {
             dataContext = context;
+        }
+        protected IDbFactory DbFactory
+        {
+            get;
+            private set;
+        }
+        protected ApplicationDbContext DbContext
+        {
+            get { return dataContext ?? (dataContext = DbFactory.Init()); }
         }
         public virtual void Add(T entity)
         {
             dataContext.Set<T>().Add(entity);
         }
+
+
         public virtual void Update(T entity)
         {
             dataContext.Set<T>().Attach(entity);
@@ -36,13 +48,20 @@ namespace ClothingShopping.Repository
             foreach (T obj in objects)
                 dataContext.Set<T>().Remove(obj);
         }
+        public virtual void DeleteRange(List<T> obj)
+        {
+            dataContext.Set<T>().RemoveRange(obj);
+        }
         public bool CheckUniqueName(Expression<Func<T, bool>> where)
         {
             //Check Unique Name of T
-            
+
             return dataContext.Set<T>().Where(where).FirstOrDefault() == null ? true : false;
         }
-
+        public virtual void AddMulti(IEnumerable<T> entity)
+        {
+            dataContext.Set<T>().AddRange(entity);
+        }
         public virtual T GetSingleById(int? id)
         {
             return dataContext.Set<T>().Find(id);

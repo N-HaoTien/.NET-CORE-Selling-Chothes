@@ -7,13 +7,14 @@ namespace ClothingShopping.Services
         public Order GetDetail(int id);
 
         public void Add(Order Order);
+        public IEnumerable<Order> GetAll();
 
         public void Update(Order Order);
 
         public void Delete(int id);
 
         public void Delete(Order Order);
-        public Task<IEnumerable<Order>> GetListOrderbyUser(string Id);
+        public List<Order> GetListOrderbyUser(string userId);
         public Task<IEnumerable<Order>> GetListOrderbyFromToDate(DateTime From, DateTime To);
 
         public void Save();
@@ -23,18 +24,18 @@ namespace ClothingShopping.Services
         public IOrder _Order;
         public IUnitOfWork _unitOfWork;
 
-        public OrderService(IOrder _Order, IUnitOfWork unitOfWork)
+        public OrderService(IOrder _order, IUnitOfWork unitOfWork)
         {
-            _Order = _Order;
+            _Order = _order;
             _unitOfWork = unitOfWork;
         }
         public Task<IEnumerable<Order>> GetListOrderbyFromToDate(DateTime From, DateTime To)
         {
             return _Order.GetListOrderbyFromToDate(From, To);
         }
-        public Task<IEnumerable<Order>> GetListOrderbyUser(string Id)
+        public List<Order> GetListOrderbyUser(string userId)
         {
-            return _Order.GetListOrderbyUser(Id);
+            return _Order.GetListOrderbyUser().Where(p => p.UserId == userId).ToList();
         }
         public Order GetDetail(int id)
         {
@@ -64,6 +65,11 @@ namespace ClothingShopping.Services
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<Order> GetAll()
+        {
+            return _Order.GetAll();
         }
     }
 }

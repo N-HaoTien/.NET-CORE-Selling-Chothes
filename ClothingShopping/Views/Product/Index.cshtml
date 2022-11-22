@@ -1,0 +1,26 @@
+﻿@model PagedResult<Product>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //@await Component.InvokeAsync("Pager",Model)
+}
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Nhập sản phẩm cần tìm ..." aria-label="Default" aria-describedby="inputGroup-sizing-default" id="NameProduct">
+    @Html.DropDownList("StatusSelected",
+    ViewBag.SelectedStatus,
+    "Tất cả",
+    new { @class = "form-control" })
+
+    @Html.DropDownList("CategorySelected",ViewBag.CategoryList, 
+        "Tất cả", new { @class = "form-control" })
+    
+
+    <a onclick="SearchProduct()" class="btn btn-outline-secondary text-primary">Search</a>
+</div>
+<div id="View_All_Product">
+    @Html.Partial("ListProducts",Model)
+</div> 
+<div id="ComponentProduct">
+    @Html.Partial("DefaultPaginationProduct",Model)
+</div>

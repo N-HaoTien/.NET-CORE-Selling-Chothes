@@ -1,0 +1,174 @@
+﻿@model ProductActionModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string title = ViewBag.Title;
+    string ProductName = ViewBag.ProductName;
+
+}
+
+<h1>@title</h1>
+@if (Model.Id > 0)
+{
+    <h4>Product: @ProductName</h4>
+}
+<hr />
+<form asp-action="AddorUpdate" enctype="multipart/form-data" asp-controller="Product">
+    <div class="mb-3 row">
+
+        <div class="col-md-6">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NewPrice" class="control-label"></label>
+                <input asp-for="NewPrice" class="form-control" />
+                <span asp-validation-for="NewPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OldPrice" class="control-label"></label>
+                <input asp-for="OldPrice" class="form-control" disabled />
+                <span asp-validation-for="OldPrice" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="formFile" asp-for="PicturesFile" class="form-label"></label>
+                <input id="selectPictures" class="form-control" type="file" multiple>
+                <input type="hidden" name="picturesID" id="picturesID" value="" />
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Background</label>
+                <input id="UrlPic" type="file" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.CategoryId,Model.CategoryList, "Select Category", new { @class = "form-control" })
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                @*<select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>*@
+            </div>
+            <div id="ViewsizeIDs">
+                @Html.Partial("_ListSize",Model)
+            </div>
+            <input type="hidden" asp-for="UrlPictureBg" />
+
+            <input type="hidden" asp-for="SizeIDs" />
+            <input type="hidden" asp-for="ProductSize" />
+
+            <div class="form-group">
+                <input type="submit" id="ActionButton" value="@ViewBag.Product" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div id="picturesArea2">
+                @if (!string.IsNullOrEmpty(Model.UrlPictureBg))
+                {
+                    <img src="~/Content/@Model.UrlPictureBg" id="bgImage" class="img-fluid" />
+                }
+            </div>
+            <div id="picturesArea">
+                @if (Model.productPictures != null && Model.productPictures.Count > 0)
+                {
+                    foreach (var item in Model.productPictures)
+                    {
+                        <img src="~/Content/@(item.Url)" onclick=" removeMe(this)" class="img-fluid" data-id="@item.Id" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+</form>
+<div id="imageTemplate2">
+    <img src="" class="img-fluid" />
+</div>
+
+<div id="imageTemplate">
+    <img src="" class="img-fluid" onclick="removeMe(this)" />
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $("#UrlPic").change(function () {
+            var fileUpload = $('#UrlPic').get(0);
+            var files = fileUpload.files;
+            var formData = new FormData();
+            formData.append('file', files[0]);
+            $.ajax({
+                type: 'Post',
+                url: '/Product/UploadImageBg',
+                contentType: false,
+                processData: false,
+                data: formData,
+            }).done(function (response) {
+                $("#UrlPictureBg").val(response.data);
+                $("#picturesArea2").html('');
+                var $imgHTML = $("#imageTemplate2").clone();
+                $imgHTML.find("img").attr("src", "/Content/" + response.data);
+                $("#picturesArea2").append($imgHTML).html();
+            })
+
+        });
+        $(document).ready(function (e) {
+            var ListSizeId = [];
+            var ItemsId = "";
+            $("#sizeDiv input[type=checkbox]").each(function (index, val) {
+                var SizeId = $(val).attr("id");
+                var isChecked = $("#" + SizeId).is(":checked", true);
+                if (isChecked) {
+                    ListSizeId.push(SizeId);
+                }
+                ItemsId = ListSizeId.toString();
+                $("#SizeIDs").val(ListSizeId.join());
+                console.log("ListSize : " + ItemsId);
+            })
+        });
+        $("#CategoryId").change(function (event) {
+            event.preventDefault();
+            var CategoryID = $("#CategoryId").val();
+            console.log('CategoryID : ' + CategoryID);
+            $.ajax({
+                type: 'Post',
+                url: '@Url.Action("ChangeViewSize","Product")',
+                data: { productId: @Model.Id, CategoryId: CategoryID },
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    $("#ViewsizeIDs").html(response.html);
+                }
+            })
+        });
+
+        var OnclickCheckbox = function () {
+            var ListSizeId = [];
+            var ItemsId = "";
+
+            $("#sizeDiv input[type=checkbox]").each(function (index, val) {
+                var SizeId = $(val).attr("id");
+                var SizeName = $(val).attr("data-name");
+                console.log(SizeName);
+                console.log(SizeId);
+                var isChecked = $("#" + SizeId).is(":checked", true);
+                if (isChecked) {
+                    ListSizeId.push(SizeId);
+                }
+                ItemsId = ListSizeId.toString();
+                $("#SizeIDs").val(ListSizeId.join());
+                console.log("ListSize : " + ItemsId);
+            })
+        }
+    </script>
+}

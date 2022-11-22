@@ -14,6 +14,7 @@ namespace ClothingShopping.Services
 
         public void Delete(OrderItem OrderItem);
         public Task<IEnumerable<OrderItem>> GetListOrderIncludeOrderItembyUser(string Id);
+        public List<OrderItem> GetProductIdByOrder(int OrderId);
 
         public void Save();
     }
@@ -24,7 +25,7 @@ namespace ClothingShopping.Services
 
         public OrderItemService(IOrderItem _OrderItem, IUnitOfWork unitOfWork)
         {
-            _OrderItem = _OrderItem;
+            this._OrderItem = _OrderItem;
             _unitOfWork = unitOfWork;
         }
         public Task<IEnumerable<OrderItem>> GetListOrderIncludeOrderItembyUser(string Id)
@@ -38,7 +39,7 @@ namespace ClothingShopping.Services
 
         public void Add(OrderItem OrderItem)
         {
-            _OrderItem.Add(OrderItem); Save();
+            _OrderItem.Add(OrderItem);
         }
 
         public void Update(OrderItem OrderItem)
@@ -58,6 +59,11 @@ namespace ClothingShopping.Services
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public List<OrderItem> GetProductIdByOrder(int OrderId)
+        {
+            return _OrderItem.GetProductIdByOrder(OrderId);
         }
     }
 }
